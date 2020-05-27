@@ -1,0 +1,96 @@
+---
+title: "Appendix 2. Plotting the results"
+author: "Maria Abildtrup Madsen"
+date: "22/5/2020"
+output: pdf_document
+---
+
+# SETTING UP 
+```{r}
+#Load packages 
+library(ggplot2)
+library(gridExtra)
+
+# Import dataset 
+setwd("/Users/mariaa.madsen/Google Drive/DataScience_Football_Analysis/Outputs/")
+DF_21_clusters <- read.csv("DF_clusters.csv")
+
+DF_21_clusters$accurate = as.factor(DF_21_clusters$accurate)
+```
+
+# Plottin passes / accuracy for each match
+```{r}
+theme_set(theme_minimal())
+
+# Histogram on a Continuous (Numeric) Variable
+g_FR <- ggplot(DF_21_clusters[which(DF_21_clusters$match=="DK_FR"),], aes(cluster_label))# + scale_fill_brewer(palette = "Spectral")
+g_CR <- ggplot(DF_21_clusters[which(DF_21_clusters$match=="DK_CR"),], aes(cluster_label))# + scale_fill_brewer(palette = "Spectral")
+g_AU <- ggplot(DF_21_clusters[which(DF_21_clusters$match=="DK_AU"),], aes(cluster_label))# + scale_fill_brewer(palette = "Spectral")
+g_PE <- ggplot(DF_21_clusters[which(DF_21_clusters$match=="DK_PE"),], aes(cluster_label))# + scale_fill_brewer(palette = "Spectral")
+
+
+FR = g_FR + geom_histogram(aes(fill=accurate), 
+                   binwidth = .5, 
+                   col="black", 
+                   size=.1) +  # change binwidth
+  labs(title="Denmark - France", 
+       subtitle="# of passes colored by accuracy") +
+  scale_x_continuous(breaks = round(seq(min(DF_21_clusters$cluster_label), max(DF_21_clusters$cluster_label), by = 1),1))
+
+CR = g_CR + geom_histogram(aes(fill=accurate), 
+                   binwidth = .5, 
+                   col="black", 
+                   size=.1) +  # change binwidth
+  labs(title="Denmark - Croatia", 
+       subtitle="# of passes colored by accuracy") +
+  scale_x_continuous(breaks = round(seq(min(DF_21_clusters$cluster_label), max(DF_21_clusters$cluster_label), by = 1),1))
+
+AU = g_AU + geom_histogram(aes(fill=accurate), 
+                   binwidth = .5, 
+                   col="black", 
+                   size=.1) +  # change binwidth
+  labs(title="Denmark - Australia", 
+       subtitle="# of passes colored by accuracy") +
+  scale_x_continuous(breaks = round(seq(min(DF_21_clusters$cluster_label), max(DF_21_clusters$cluster_label), by = 1),1))
+
+PE = g_PE + geom_histogram(aes(fill=accurate), 
+                   binwidth = .5, 
+                   col="black", 
+                   size=.1) +  # change binwidth
+  labs(title="Denmark - Peru", 
+       subtitle="# of passes colored by accuracy") +
+  scale_x_continuous(breaks = round(seq(min(DF_21_clusters$cluster_label), max(DF_21_clusters$cluster_label), by = 1),1))
+
+grid.arrange(FR, CR, AU, PE, nrow = 2, ncol=2)
+
+```
+
+# Plottin passes / accuracy for one player (Simon Kjær)
+```{r}
+theme_set(theme_minimal())
+
+df_skjaer = DF_21_clusters[which(DF_21_clusters$playerId ==20433), ] # S kjær
+df_ceriksen = DF_21_clusters[which(DF_21_clusters$playerId ==54), ] # C Eriksen
+
+
+# Histogram on a Continuous (Numeric) Variable
+g_kjaer <- ggplot(df_skjaer, aes(cluster_label))
+g_eriksen <- ggplot(df_ceriksen, aes(cluster_label))
+
+g_kjaer + geom_histogram(aes(fill=accurate), 
+                   binwidth = .5, 
+                   col="black", 
+                   size=.1) +  # change binwidth
+  labs(title="Simon Kjær") +
+  scale_x_continuous(breaks = round(seq(min(DF_21_clusters$cluster_label), max(DF_21_clusters$cluster_label), by = 1),1))
+
+g_eriksen + geom_histogram(aes(fill=accurate), 
+                   binwidth = .5, 
+                   col="black", 
+                   size=.1) +  # change binwidth
+  labs(title="Christian Eriksen") +
+  scale_x_continuous(breaks = round(seq(min(DF_21_clusters$cluster_label), max(DF_21_clusters$cluster_label), by = 1),1))
+
+
+```
+
